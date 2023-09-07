@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import {signInWithEmailAndPassword, getAuth, signOut, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail} from 'firebase/auth'
 
+import {getFirestore} from 'firebase/firestore'
+
 const firebaseConfig = {
   apiKey: "AIzaSyDGu_4Z3YrNRMZGOeSSQKnscFiEHsxrsMA",
   authDomain: "autenticacion-ecommerce-909f5.firebaseapp.com",
@@ -15,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app)
+export const db = getFirestore(app)
 
 //LOGIN
 export const login = async ({email, password}) => {
