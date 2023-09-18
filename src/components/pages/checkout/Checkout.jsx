@@ -32,7 +32,7 @@ const Checkout = () => {
   });
 
   const [orderId, setOrderId] = useState(null);
-const [shipmentCost, setShipmentCost] = useState(0);
+  const [shipmentCost, setShipmentCost] = useState(0);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -67,18 +67,17 @@ const [shipmentCost, setShipmentCost] = useState(0);
       }
     }
     console.log("2" + paramValue);
-
   }, [paramValue]);
 
   useEffect(() => {
-    let shipmentCollection = collection (db, "shipment");
+    let shipmentCollection = collection(db, "shipment");
     let shipmentDoc = doc(shipmentCollection, "cjaxH9wiCpdkqlPulOSa");
-    getDoc(shipmentDoc).then((res) => {
+    getDoc(shipmentDoc)
+      .then((res) => {
         setShipmentCost(res.data().cost);
-    })
-    .catch((error) => console.log(error));
-    }, [])
-  
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   let total = getTotalPrice();
 
@@ -93,7 +92,7 @@ const [shipmentCost, setShipmentCost] = useState(0);
 
     try {
       let response = await axios.post(
-        "http://localhost:8080/create_preference",
+        "https://e-commerce-personal-backend-q6f9ku4xl-michaelrodriguezuy.vercel.app/create_preference",
         {
           items: items,
           shipment_cost: shipmentCost,
