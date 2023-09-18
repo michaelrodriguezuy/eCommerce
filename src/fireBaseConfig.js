@@ -1,16 +1,16 @@
 
 import { initializeApp } from "firebase/app";
-import {signInWithEmailAndPassword, getAuth, signOut, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail} from 'firebase/auth'
+import { signInWithEmailAndPassword, getAuth, signOut, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 
-import {getFirestore} from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDGu_4Z3YrNRMZGOeSSQKnscFiEHsxrsMA",
-  authDomain: "autenticacion-ecommerce-909f5.firebaseapp.com",
-  projectId: "autenticacion-ecommerce-909f5",
-  storageBucket: "autenticacion-ecommerce-909f5.appspot.com",
-  messagingSenderId: "309313267186",
-  appId: "1:309313267186:web:3fc5b8ce60e15732cf776b"
+    apiKey: import.meta.env.VITE_APIKEY,
+    authDomain: import.meta.env.VITE_AUTH,
+    projectId: import.meta.env.VITE_PROJECTID,
+    storageBucket: import.meta.env.VITE_STORAGE,
+    messagingSenderId: import.meta.env.VITE_MESSAGING,
+    appId: import.meta.env.VITE_APPID,
 };
 
 // Initialize Firebase
@@ -20,9 +20,9 @@ const auth = getAuth(app)
 export const db = getFirestore(app)
 
 //LOGIN
-export const login = async ({email, password}) => {
-    try {        
-        let res=await signInWithEmailAndPassword(auth, email, password)
+export const login = async ({ email, password }) => {
+    try {
+        let res = await signInWithEmailAndPassword(auth, email, password)
         return res
     } catch (error) {
         console.log(error)
@@ -30,8 +30,8 @@ export const login = async ({email, password}) => {
 }
 
 //LOGOUT
-export const logout =  () => {
-    signOut(auth)    
+export const logout = () => {
+    signOut(auth)
 }
 
 //login con google
@@ -46,7 +46,7 @@ export const loginGoogle = async () => {
 }
 
 //registro
-export const register = async ({email, password}) => {
+export const register = async ({ email, password }) => {
     try {
         let res = await createUserWithEmailAndPassword(auth, email, password)
         return res
@@ -58,8 +58,8 @@ export const register = async ({email, password}) => {
 //recuperar contraseña
 export const resetPassword = async (email) => {
     try {
-       let res = await sendPasswordResetEmail(auth, email)        
-       return res
+        let res = await sendPasswordResetEmail(auth, email)
+        return res
     } catch (error) {
         console.log(error)
     }

@@ -15,31 +15,43 @@ import GoogleIcon from "@mui/icons-material/Google";
 
 import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
-import { login, loginGoogle } from "../../../fireBaseConfig";
+import { useContext, useState } from "react";
+import { db, login, loginGoogle } from "../../../fireBaseConfig";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { AuthContext } from "../../../context/AuthContext";
 
 const Login = () => {
+  const { handleLogin } = useContext(AuthContext);
+
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-
-
 
   const [userCredentials, setUserCredentials] = useState({
     email: "",
     password: "",
   });
 
-  const handleChange = (e) => {    
+  const handleChange = (e) => {
     setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {      
+    try {
       const res = await login(userCredentials);
       if (res.user) {
+        const userCollection = collection(db, "users");
+        const userRef = doc(userCollection, res.user.uid);
+        const userDoc = await getDoc(userRef);
+
+        let finalyUser = {
+          email: res.user.email,
+          rol: userDoc.data().rol,
+        };
+
+        handleLogin(finalyUser);
         navigate("/");
-        console.log(res);
       }
     } catch (error) {
       console.log(error);
@@ -50,8 +62,7 @@ const Login = () => {
     try {
       const res = await loginGoogle();
       if (res.user) {
-        navigate("/");
-        console.log(res);
+        navigate("/");        
       }
     } catch (error) {
       console.log(error);
@@ -78,7 +89,12 @@ const Login = () => {
           justifyContent={"center"}
         >
           <Grid item xs={10} md={12}>
-            <TextField name="email" label="Email" fullWidth onChange={handleChange}/>
+            <TextField
+              name="email"
+              label="Email"
+              fullWidth
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={10} md={12}>
             <FormControl variant="outlined" fullWidth>
@@ -163,7 +179,7 @@ const Login = () => {
                 <Button
                   variant="contained"
                   fullWidth
-                  onClick={()=>navigate("/register")}
+                  onClick={() => navigate("/register")}
                   type="button"
                   sx={{
                     color: "white",

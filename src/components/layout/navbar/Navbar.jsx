@@ -13,16 +13,21 @@ import Toolbar from "@mui/material/Toolbar";
 
 import { Link, useNavigate, Outlet } from "react-router-dom";
 import "./Navbar.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { menuItems } from "../../../router/navigation";
 import { logout } from "../../../fireBaseConfig";
+import { AuthContext } from "../../../context/AuthContext";
 
 //import Img from "../../../assets/logo/football-sin-fondo.png";
 
 const drawerWidth = 200;
 
 function Navbar(props) {
+  const rolAdmin = import.meta.env.VITE_ROLADMIN;
+  const { logoutContext, user } = useContext(AuthContext);
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -31,19 +36,15 @@ function Navbar(props) {
     setMobileOpen(!mobileOpen);
   };
 
-
-
-const handleLogout = () => {
+  const handleLogout = () => {
     try {
-      logout();      
+      logout();
+      logoutContext();
       navigate("/login");
     } catch (error) {
       console.log(error);
     }
   };
-
-
-
 
   const drawer = (
     <div>
@@ -64,7 +65,21 @@ const handleLogout = () => {
             </Link>
           );
         })}
-
+        {user.rol === rolAdmin && (
+          <Link to="/dashboard">
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <DashboardIcon sx={{ color: "whitesmoke" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Dashboard"}
+                  sx={{ color: "whitesmoke" }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        )}
         <ListItem disablePadding>
           <ListItemButton onClick={handleLogout}>
             <ListItemIcon>

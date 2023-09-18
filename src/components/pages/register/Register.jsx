@@ -13,29 +13,32 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../../../fireBaseConfig";
+import { register, db } from "../../../fireBaseConfig";
+import { setDoc, doc } from "firebase/firestore";
 
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-
 
   const [userCredentials, setUserCredentials] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
     setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await register(userCredentials);
-       console.log(res);
-      navigate("/");
+      if (res.user.uid) {
+        await setDoc(doc(db, "users", res.user.uid), {rol: "user"});
+      }
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +64,12 @@ const Register = () => {
           justifyContent={"center"}
         >
           <Grid item xs={10} md={12}>
-            <TextField name="email" label="Email" fullWidth onChange={handleChange}/>
+            <TextField
+              name="email"
+              label="Email"
+              fullWidth
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={10} md={12}>
             <FormControl variant="outlined" fullWidth>
