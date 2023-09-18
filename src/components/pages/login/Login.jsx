@@ -61,9 +61,13 @@ const Login = () => {
   const handleLoginGoogle = async () => {
     try {
       const res = await loginGoogle();
-      if (res.user) {
-        navigate("/");        
-      }
+      let finalyUser = {
+        email: res.user.email,
+        rol: "user",
+      };
+
+      handleLogin(finalyUser);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
