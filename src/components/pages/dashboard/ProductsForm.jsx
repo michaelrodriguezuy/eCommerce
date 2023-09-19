@@ -10,7 +10,6 @@ const ProductsForm = ({
   setProductSelected,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-
   const [newProduct, setNewProduct] = useState({
     title: "",
     description: "",
@@ -19,7 +18,6 @@ const ProductsForm = ({
     category: "",
     image: "",
   });
-
   const [file, setFile] = useState(null);
 
   const handleImage = async () => {
@@ -67,7 +65,6 @@ const ProductsForm = ({
         unit_price: +newProduct.unit_price,
         stock: +newProduct.stock,
       };
-
       addDoc(productsCollection, obj).then(() => {
         setIsChange(true);
         handleClose();
@@ -89,47 +86,47 @@ const ProductsForm = ({
         <TextField
           variant="outlined"
           defaultValue={productSelected?.title}
-          label="Nombre"
+          label="nombre"
           name="title"
           onChange={handleChange}
         />
         <TextField
           variant="outlined"
           defaultValue={productSelected?.description}
-          label="Descripción"
+          label="descripcion"
           name="description"
           onChange={handleChange}
         />
         <TextField
           variant="outlined"
           defaultValue={productSelected?.unit_price}
-          label="Precio"
+          label="precio"
           name="unit_price"
           onChange={handleChange}
         />
         <TextField
           variant="outlined"
           defaultValue={productSelected?.stock}
-          label="Stock"
+          label="stock"
           name="stock"
           onChange={handleChange}
         />
         <TextField
           variant="outlined"
           defaultValue={productSelected?.category}
-          label="Categoria"
+          label="categoria"
           name="category"
           onChange={handleChange}
         />
         <TextField type="file" onChange={(e) => setFile(e.target.files[0])} />
         {file && (
-          <Button variant="contained" onClick={handleImage} type="button">
+          <Button onClick={handleImage} type="button">
             Cargar imagen
           </Button>
         )}
         {file && !isLoading && (
           <Button variant="contained" type="submit">
-            {productSelected ? "Editar" : "Crear"}
+            {productSelected ? "modificar" : "crear"}
           </Button>
         )}
       </form>
