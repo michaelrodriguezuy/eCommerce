@@ -3,7 +3,9 @@ import { createContext, useState } from "react";
 export const CartContext = createContext();
 
 const CartContextComponent = ({ children }) => {
-  const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")) || []);
+  const [cart, setCart] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
 
   const addItem = (product) => {
     let existe = cart.some((elemento) => elemento.id === product.id);
@@ -42,7 +44,7 @@ const CartContextComponent = ({ children }) => {
 
   const getTotalPrice = () => {
     let total = cart.reduce((acumulador, elemento) => {
-      return acumulador + elemento.unit_price * elemento.quantity;
+      return acumulador + (elemento.unit_price * elemento.quantity);
     }, 0);
     return total;
   };
@@ -53,7 +55,7 @@ const CartContextComponent = ({ children }) => {
     getQuantityById,
     clearCart,
     deleteById,
-    getTotalPrice
+    getTotalPrice,
   };
 
   return <CartContext.Provider value={data}>{children}</CartContext.Provider>;

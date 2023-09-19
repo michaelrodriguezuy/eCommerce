@@ -4,6 +4,9 @@ import { signInWithEmailAndPassword, getAuth, signOut, signInWithPopup, GoogleAu
 
 import { getFirestore } from 'firebase/firestore'
 
+import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import {v4} from 'uuid'
+
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_APIKEY,
     authDomain: import.meta.env.VITE_AUTH,
@@ -18,6 +21,8 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app)
 export const db = getFirestore(app)
+
+const storage = getStorage(app)
 
 //LOGIN
 export const login = async ({ email, password }) => {
@@ -64,3 +69,11 @@ export const resetPassword = async (email) => {
         console.log(error)
     }
 }
+
+// storage
+export const uploadFile = async (file)=>{
+    const storageRef = ref( storage, v4() )
+    await uploadBytes(storageRef, file)
+    let url = await getDownloadURL(storageRef)
+    return url
+  }
